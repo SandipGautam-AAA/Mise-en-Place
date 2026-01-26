@@ -1,0 +1,40 @@
+# --- OS Generated Files ---
+.DS_Store
+Thumbs.db
+*.swp
+desktop.ini
+
+# --- Compiled Binaries & Executables (The Big Files) ---
+*.exe
+*.o
+*.obj
+*.out
+*.app
+*.bin
+*.hex
+
+# --- IDE & Editor Specific ---
+.vscode/
+.vs/
+*.sublime-project
+*.sublime-workspace
+*.suo
+*.user
+*.userosscache
+*.sln
+*.vcxproj
+*.filters
+
+# --- Graphics & Specific Lab Junk ---
+runGraphics.txt
+graphics.log
+*.tlog
+*.lastbuildstate
+
+# --- Project Specific (Unreal Engine / Game Dev Prep) ---
+Binaries/
+Build/
+DerivedDataCache/
+Intermediate/
+Saved/
+*.pdb
