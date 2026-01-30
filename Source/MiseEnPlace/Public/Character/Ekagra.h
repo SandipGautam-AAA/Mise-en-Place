@@ -9,6 +9,7 @@
 
 class UInputAction;
 class UInputMappingContext;
+class AFlashLight;
 
 UCLASS()
 class MISEENPLACE_API AEkagra : public ACharacter
@@ -70,6 +71,20 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Inputs|Actions")
 	UInputAction* CrouchAction;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Inputs|Actions")
+	UInputAction* FlashLightAction;
+
+	// This allows you to pick your Flashlight Blueprint in the Character Editor
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Equipment")
+	TSubclassOf<class AFlashLight> FlashLightClass;
+
+	// The actual instance of the flashlight in the world
+	UPROPERTY()
+	AFlashLight* MyFlashLight;
+
+	// The function that the button will call
+	void OnToggleFlashLight();
 
 private:
 

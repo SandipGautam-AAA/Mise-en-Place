@@ -9,6 +9,7 @@
 #include "InputActionValue.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Actors/FlashLight.h"
 
 
 
@@ -32,6 +33,7 @@ AEkagra::AEkagra()
 	CrouchingHeight = 30.0f; // Lowered eye level
 	CurrentCameraZ = StandingHeight;
 
+	
 }
 
 // Called when the game starts or when spawned
@@ -45,6 +47,36 @@ void AEkagra::BeginPlay()
 				Subsystem->AddMappingContext(EkagraMappingContext, 0);
 			}
 		}	
+	}
+
+	// Spawn FlashLight and Attach it to the Camera
+	if (FlashLightClass) {
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = this;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		MyFlashLight = GetWorld()->SpawnActor<AFlashLight>(FlashLightClass, GetActorLocation(), GetActorRotation(), SpawnParams);
+		if (MyFlashLight) {
+
+			// Attach to "FirstPersonCamera" (or whatever your camera component is named)
+			// This ensures the light follows where the player looks
+			FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
+			MyFlashLight->AttachToComponent(FirstPersonCamera, AttachmentRules);
+			// Debug Line: This will print a message on screen if successful
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Flashlight Spawned and Attached!"));
+		}
+	}
+	else {
+		// Add this to confirm if the Class is the problem
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("ERROR: FlashLightClass is NOT ASSIGNED in Blueprint!"));
+	}
+
+
+}
+
+void AEkagra::OnToggleFlashLight()
+{
+	if (MyFlashLight) {
+		MyFlashLight->ToggleFlashlight();
 	}
 
 }
@@ -125,7 +157,7 @@ void AEkagra::Tick(float DeltaTime)
 	bool bIsMoving = GetVelocity().Size() > 0.f;
 	if (bIsSprinting && bIsMoving) {
 		CurrentStamina -= StaminaDrainRate * DeltaTime;
-		if (CurrentStamina >= 0.f) {
+		if (CurrentStamina <= 0.f) {
 			CurrentStamina = 0.f;
 			bIsExhausted = true;
 			StopSprint();
@@ -167,6 +199,9 @@ void AEkagra::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 		if (CrouchAction) {
 			EnhancedInput->BindAction(CrouchAction, ETriggerEvent::Triggered, this, &AEkagra::StartCrouch);
 			EnhancedInput->BindAction(CrouchAction, ETriggerEvent::Completed, this, &AEkagra::StopCrouch);
+		}
+		if (FlashLightAction) {
+			EnhancedInput->BindAction(FlashLightAction, ETriggerEvent::Started, this, &AEkagra::OnToggleFlashLight);
 		}
 	}
 
