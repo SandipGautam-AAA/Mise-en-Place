@@ -9,6 +9,7 @@ Welcome to **Mise-en-Place**. This repository marks my transition from academic 
 | Feature | Status | Description |
 | :--- | :--- | :--- |
 | **Input System** | ✅ Completed | Implementation of UE5 Enhanced Input. |
+| **Flashlight System** | 🚧 In Progress | Implementing dynamic flashlight logic with time-modulated flickering and shadow casting.
 | **World Design** | 🚧 In Progress | Gray-boxing and level prototyping. |
 | **Core Logic** | 🚧 In Progress | C++ Actor classes and blueprint integration. |
 
